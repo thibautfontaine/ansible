@@ -1,15 +1,31 @@
 ---
-- name: install basic packages on debian
+- name: install basic packages on debian and centos
   hosts: localhost
   become: yes
   tasks:
-    - name: install packages
-      apt:
+  - name: install packages Debian
+    apt:
       name: "{{ item }}"
-      state:  present
+      state: present
+      update_cache: true
+    with_items: [vim,tree,ntp,ntpdate,git]
+    when: ansible_os_family == "Debian"
+  - name: install packages Centos
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
       - vim
       - tree
+      - ntp
+      - ntpdate
+      - bash-completion
+      - firewalld
       - git
+    when: ansible_os_family =="RedHat"
+
+
+
 
 
 
