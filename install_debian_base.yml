@@ -5,6 +5,11 @@
   tasks:
     - name: install packages
       apt:
-      name: vim
+      name: "{{ item }}"
       state:  present
-      
+      - vim
+      - tree
+      - git
+
+
+
