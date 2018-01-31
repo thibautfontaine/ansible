@@ -1,0 +1,8 @@
+[ansible]
+localhost ansible_connection=local
+
+[webservers]
+web ansible_host=10.56.1.53
+
+[webservers]
+ansible_user=thibaut
