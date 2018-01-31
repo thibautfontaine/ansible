@@ -6,7 +6,7 @@
     - name: install packages
       apt:
       name: "{{ item }}"
-      state:  present
+      state: present
       - vim
       - tree
       - git
