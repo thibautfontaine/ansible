@@ -5,14 +5,14 @@
   tasks:
   - name: install packages Debian
     apt:
-      name: "{ item }"
+      name: "{{ item }}"
       state: present
       update_cache: true
     with_items: [vim,tree,ntp,ntpdate,git]
     when: ansible_os_family == "Debian"
   - name: install packages Centos
     yum:
-      name: "{ item }"
+      name: "{{ item }}"
       state: present
     with_items:
       - vim
