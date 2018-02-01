@@ -1,0 +1,37 @@
+---
+- name: install wordpress
+  hosts: webservers
+  become: true
+
+  tasks:
+  - name: install debian
+    apt:
+  - name: download wordpress
+  get_url: https://wordpress.org/latest.zip
+
+  - name: unzip Wordpress archive
+
+
+
+  - name: Create Wordpress Mysql database
+    update_cache: yes
+package:
+  - name: "{{ item }}"
+    state: latest
+    with_items:[mysql-server]
+
+  - name: Start the server
+    service:
+name: mysql
+state: started
+- wait_for:
+port: 3306
+- mysql_user:
+name: thibaut
+password: 'thibaut'
+encrypted: yes
+priv: '*.*:ALL,GRANT'
+state: present
+
+
+  - name: Create User Mysql Database
