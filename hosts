@@ -9,3 +9,6 @@ ansible_user=thibaut
 
 [win]
 winl ansible_host=10.56.1.10
+[wind]
+winl ansible_host=10.56.1.12
+
