@@ -4,7 +4,7 @@
   tasks:
   - name:
     - win_updates:
-      category_names:
-        - SecurityUpdates
-        - CriticalUpdates
-        - UpdateRollups
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
