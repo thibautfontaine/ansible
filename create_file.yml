@@ -6,4 +6,9 @@
     win_file:
       path: C:\Users\Administrateur.WIN-880S38BE1DN\Documents\coucou.txt
       state: touch
+  - name: create folder
+    win_file: 
+      path: C:\Users\Administrateur.WIN-880S38BE1DN\Documents\Exploitation
+      state: directory
+
   
