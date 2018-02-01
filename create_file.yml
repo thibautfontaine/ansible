@@ -1,0 +1,7 @@
+
+
+- name: Touch a file 
+  hosts: win
+  win_file:
+    path: C:\Users\Administrateur.WIN-880S38BE1DN\Documents\coucou.txt
+    state: touch
