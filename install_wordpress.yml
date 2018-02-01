@@ -1,37 +1,71 @@
 ---
-- name: install wordpress
+- name: install WordPress
   hosts: webservers
   become: true
-
+  vars:
+    db_name: wordpress
+    db_user: wpuser
+    db_pwd: password
+    admin_user: adminwordpress
+    admin_password: password
+    admin_email: thib
+  
   tasks:
-  - name: install debian
+  - name: install prerequisites on CentOS
+    yum:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items: [httpd,php,mariadb,unzip,mysql-python]
+    when: ansible_os_family == "RedHat"
+
+  - name: install prerequisites on Debian/Ubuntu
     apt:
-  - name: download wordpress
-  get_url: https://wordpress.org/latest.zip
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items: [apache2,php,mysql-server,unzip,python-mysqldb,php-mysql,libapache2-mod-php7.0,php-curl,php-xmlrpc,php-fpm]
+    when: ansible_os_family == "Debian"
+  
+  - name: download WordPress archive
+    get_url: 
+      url: https://wordpress.org/latest.zip
+      dest: /tmp/wordpress.zip
 
-  - name: unzip Wordpress archive
+  - name: unzip WordPress archive
+    unarchive:
+      src: /tmp/wordpress.zip
+      dest: /var/www/html
+      remote_src: yes
 
+  - name: create wordpress mysql database
+    mysql_db:
+      name: "{{ db_name }}"
+      state: present
+    
+  - name: create wordpress user on mysql
+    mysql_user:
+      name: "{{ db_user }}"
+      password: "{{ db_pwd }}"
+      priv: '{{ db_name }}.*:ALL'
+      state: present
+    
+  - name: install wp-cli
+    get_url:
+      url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+      dest: /usr/local/bin/wp
+      mode: 0755
+      
+  - name: configure wordpress (wp-config.php)
+    command: "wp config create --allow-root --path=/var/www/html/wordpress --locale=fr_FR --dbname={{ db_name }} --dbuser={{ db_user }} --dbpass={{ db_pwd }}"
+    
+  - name: install wordpress first website
+    command: "wp core install --allow-root --path=/var/www/html/wordpress --url=http://10.56.1.53/wordpress --title=MonSite --admin_user={{ admin_user }} --admin_password={{ admin_password}} --admin_email={{ admin_email }}"
 
+  - name: configure first website home
+    command: "wp option update home 'http://10.56.1.53/wordpress' --path=/var/www/html/wordpress --allow-root"
 
-  - name: Create Wordpress Mysql database
-    update_cache: yes
-package:
-  - name: "{{ item }}"
-    state: latest
-    with_items:[mysql-server]
-
-  - name: Start the server
-    service:
-name: mysql
-state: started
-- wait_for:
-port: 3306
-- mysql_user:
-name: thibaut
-password: 'thibaut'
-encrypted: yes
-priv: '*.*:ALL,GRANT'
-state: present
-
-
-  - name: Create User Mysql Database
+  - name: configure first website url
+    command: "wp option update siteurl 'http://10.56.1.53/wordpress' --path=/var/www/html/wordpress --allow-root"
+  
+    
