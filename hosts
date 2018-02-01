@@ -8,4 +8,4 @@ web ansible_host=10.56.1.53
 ansible_user=thibaut
 
 [win]
-win ansible_host=10.56.1.10
+winl ansible_host=10.56.1.10
