@@ -9,7 +9,7 @@
     admin_user: adminwordpress
     admin_password: password
     admin_email: thib
-  
+
   tasks:
   - name: install prerequisites on CentOS
     yum:
