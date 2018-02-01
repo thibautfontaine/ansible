@@ -3,7 +3,7 @@
   hosts: wind
   tasks:
   - name:
-    - win_updates:
+      win_updates:
         category_names:
           - SecurityUpdates
           - CriticalUpdates
