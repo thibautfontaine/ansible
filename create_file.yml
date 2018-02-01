@@ -1,6 +1,9 @@
+---
 - name: Touch a file 
   hosts: win
-  win_file:
-    path: C:\Users\Administrateur.WIN-880S38BE1DN\Documents\coucou.txt
-    state: file
+  tasks:
+  - name: create file
+    win_file:
+      path: C:\Users\Administrateur.WIN-880S38BE1DN\Documents\coucou.txt
+      state: file
   
